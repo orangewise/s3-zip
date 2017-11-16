@@ -6,12 +6,25 @@ module.exports = s3Zip
 
 s3Zip.archive = function (opts, folder, filesS3, filesZip) {
   var self = this
-  var keyStream = s3Files
-    .connect({
-      region: opts.region,
-      bucket: opts.bucket
-    })
-    .createKeyStream(folder, filesS3)
+  var connectionConfig
+
+  self.debug = opts.debug || false
+
+  if ('s3' in opts) {
+    connectionConfig = {
+      s3: opts.s3
+    }
+  } else {
+    connectionConfig = {
+      region: opts.region
+    }
+  }
+
+  connectionConfig.bucket = opts.bucket
+
+  self.client = s3Files.connect(connectionConfig)
+
+  var keyStream = self.client.createKeyStream(folder, filesS3)
 
   var fileStream = s3Files.createFileStream(keyStream, opts.preserveFolderStructure)
   var archive = self.archiveStream(fileStream, filesS3, filesZip)
@@ -19,16 +32,16 @@ s3Zip.archive = function (opts, folder, filesS3, filesZip) {
 }
 
 s3Zip.archiveStream = function (stream, filesS3, filesZip) {
+  var self = this
   var archive = archiver('zip')
   archive.on('error', function (err) {
-    console.log('archive error', err)
+    self.debug && console.log('archive error', err)
     throw err
   })
   stream
    .on('data', function (file) {
-      // console.log(file.data.toString());
      if (file.path[file.path.length - 1] === '/') {
-       console.log('don\'t append to zip', file.path)
+       self.debug && console.log('don\'t append to zip', file.path)
        return
      }
      var fname
@@ -40,7 +53,7 @@ s3Zip.archiveStream = function (stream, filesS3, filesZip) {
        // Just use the S3 file name
        fname = file.path
      }
-     console.log('append to zip', fname)
+     self.debug && console.log('append to zip', fname)
      if (file.data.length === 0) {
        archive.append('', { name: fname })
      } else {
@@ -48,7 +61,7 @@ s3Zip.archiveStream = function (stream, filesS3, filesZip) {
      }
    })
    .on('end', function () {
-     console.log('end -> finalize')
+     self.debug && console.log('end -> finalize')
      archive.finalize()
    })
 
