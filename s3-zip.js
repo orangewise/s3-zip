@@ -6,12 +6,23 @@ module.exports = s3Zip
 
 s3Zip.archive = function (opts, folder, filesS3, filesZip) {
   var self = this
-  var keyStream = s3Files
-    .connect({
-      region: opts.region,
-      bucket: opts.bucket
-    })
-    .createKeyStream(folder, filesS3)
+  var connectionConfig
+
+  if ('s3' in opts) {
+    connectionConfig = {
+      s3: opts.s3
+    }
+  } else {
+    connectionConfig = {
+      region: opts.region
+    }
+  }
+
+  connectionConfig.bucket = opts.bucket
+
+  self.client = s3Files.connect(connectionConfig)
+
+  var keyStream = self.client.createKeyStream(folder, filesS3)
 
   var fileStream = s3Files.createFileStream(keyStream, opts.preserveFolderStructure)
   var archive = self.archiveStream(fileStream, filesS3, filesZip)

@@ -48,6 +48,22 @@ s3Zip
 
 ```
 
+You can also pass a custom S3 client. For example if you want to zip files from a S3 compatible storage:
+
+```javascript
+var aws = require('aws-sdk')
+
+var s3Client = new aws.S3({
+    signatureVersion: 'v4',
+    s3ForcePathStyle: 'true',
+    endpoint: 'http://localhost:9000',
+})
+
+s3Zip
+  .archive({ s3: s3Client, bucket: 'boom' }, folder, [file1, file2])
+  .pipe(output)
+```
+
 ### Zip files with AWS Lambda
 
 Example of s3-zip in combination with [AWS Lambda](aws_lambda.md).
