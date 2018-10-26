@@ -2,14 +2,38 @@
   "name": "@candis/s3-zip",
   "version": "1.0.4",
   "description": "Download selected files from an Amazon S3 bucket as a zip file.",
-  "main": "s3-zip.js",
+  "main": "lib/s3-zip.js",
   "scripts": {
+    "build": "babel src -d lib",
     "test": "standard && tap --cov test/test*.js",
-    "coverage": "npm test -- --cov --coverage-report=lcov"
+    "coverage": "yarn test -- --cov --coverage-report=lcov",
+    "lint": "eslint",
+    "prettier": "prettier",
+    "prepublish": "yarn build && yarn test"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "printWidth": 80
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{json,css,md,yml,html}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.js": [
+      "yarn lint -- --fix --max-warnings 0",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/orangewise/s3-zip.git"
+    "url": "https://github.com/CandisIO/s3-zip.git"
   },
   "keywords": [
     "amazon",
@@ -18,19 +42,33 @@
     "zip",
     "files"
   ],
-  "author": "Ronald Luitwieler",
+  "author": "Florian Nagel",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/orangewise/s3-zip/issues"
+    "url": "https://github.com/CandisIO/s3-zip/issues"
   },
-  "homepage": "https://github.com/orangewise/s3-zip#readme",
+  "homepage": "https://github.com/CandisIO/s3-zip#readme",
   "dependencies": {
     "archiver": "^2.0.3",
     "readable-stream": "^2.1.5",
     "s3-files": "^1.0.2"
   },
   "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "babel-eslint": "^10.0.1",
     "concat-stream": "^1.5.2",
+    "eslint": "^5.5.0",
+    "eslint-config-react-app": "^2.1.0",
+    "eslint-plugin-flowtype": "^2.50.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-prettier": "^2.6.2",
+    "eslint-plugin-react": "^7.11.1",
+    "husky": "^1.1.2",
+    "lint-staged": "^7.3.0",
+    "prettier": "1.14.3",
     "proxyquire": "^1.7.10",
     "sinon": "^4.1.2",
     "standard": "^10.0.3",

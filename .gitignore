@@ -5,3 +5,6 @@ test/*.zip
 test/*.tar
 test/*.tar.gz
 .idea/
+
+dist
+lib

@@ -1,0 +1,43 @@
+{
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "allowImportExportEverywhere": true
+  },
+  "plugins": ["prettier"],
+  "extends": "react-app",
+  "rules": {
+    "no-dupe-keys": "error",
+    "default-case": 0,
+    "import/first": 0,
+    "jsx-a11y/href-no-hash": "off",
+    "radix": 0,
+    "no-undef": "error",
+    "no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "after-used",
+        "ignoreRestSiblings": false
+      }
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": true,
+        "bracketSpacing": true,
+        "semi": true,
+        "jsxBracketSameLine": true,
+        "printWidth": 80,
+        "useTabs": false,
+        "tabWidth": 2,
+        "trailingComma": "es5"
+      }
+    ]
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "jest": true,
+    "meteor": true
+  }
+}
