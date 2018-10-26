@@ -1,5 +1,7 @@
 # s3-zip
 
+[![CircleCI](https://circleci.com/gh/CandisIO/s3-zip/tree/master.svg?style=svg)](https://circleci.com/gh/CandisIO/s3-zip/tree/master)
+
 Download selected files from an Amazon S3 bucket as a zip file.
 
 ## Install
