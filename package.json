@@ -1,5 +1,5 @@
 {
-  "name": "s3-zip",
+  "name": "@candis/s3-zip",
   "version": "1.0.4",
   "description": "Download selected files from an Amazon S3 bucket as a zip file.",
   "main": "s3-zip.js",
