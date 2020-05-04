@@ -170,6 +170,35 @@ app.get('/download', (req, res) => {
 ```
 Above should stream out the file in the response of the request.
 
+## Getting Content-Length
+
+If you want to set the Content-Length Header to show the Progress you can use the `getContentLength()` Method, it will return the content length in byte.
+
+```javascript
+s3Zip.getContentLength(s3Client: AWS.S3, bucket: String, files: String[], folder: ?String): Promise
+```
+? means optional -> folder parameter is optional
+
+```javascript
+const s3Zip = require('s3-zip')
+
+app.get('/download', async (req, res) => {
+
+  // ...
+
+  const contentLength = await s3Zip.getContentLength(s3Client, bucket, files, folder)
+  
+  // now you can set the Content-Length Header
+  res.set('Content-Length', contentLength)
+
+  // ...
+
+  s3Zip
+    .archive({ region: region, bucket: bucket }, '', 'abc.jpg')
+    .pipe(res)
+})
+```
+
 ### Debug mode
 
 Enable debug mode to see the logs:

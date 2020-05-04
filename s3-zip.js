@@ -95,3 +95,17 @@ s3Zip.setRegisterFormatOptions = function (registerFormat, formatModule) {
   this.formatModule = formatModule
   return this
 }
+
+s3Zip.getContentLength = async function (s3, bucket, filesS3, folder = null) {
+  let header; let contentLength = 0; let i; let key
+
+  for (i = 0; filesS3 < filesS3.length; i++) {
+    key = (folder) ? folder + filesS3[i] : filesS3[i]
+
+    header = await s3.headObject({ Key: key, Bucket: bucket })
+      .promise()
+
+    contentLength += header.ContentLength
+  }
+  return contentLength
+}
