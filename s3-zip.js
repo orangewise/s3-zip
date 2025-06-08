@@ -39,7 +39,10 @@ s3Zip.archiveStream = function (stream, filesS3, filesZip) {
   const self = this
   const folder = this.folder || ''
   if (this.registerFormat) {
-    archiver.registerFormat(this.registerFormat, this.formatModule)
+    // Only register the format if it hasn't been registered before
+    if (!archiver.isRegisteredFormat(this.registerFormat)) {
+      archiver.registerFormat(this.registerFormat, this.formatModule)
+    }
   }
   const archive = archiver(this.format || 'zip', this.archiverOpts || {})
   archive.on('error', function (err) {
