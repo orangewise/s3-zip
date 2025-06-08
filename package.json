@@ -1,6 +1,6 @@
 {
   "name": "s3-zip",
-  "version": "3.3.1a0",
+  "version": "3.3.1-a0",
   "description": "Download selected files from an Amazon S3 bucket as a zip file.",
   "main": "s3-zip.js",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/orangewise/s3-zip.git"
+    "url": "git+https://github.com/orangewise/s3-zip.git"
   },
   "keywords": [
     "amazon",
@@ -26,6 +26,7 @@
   "homepage": "https://github.com/orangewise/s3-zip#readme",
   "dependencies": {
     "archiver": "^6.0.1",
+    "normalize-path": "^3.0.0",
     "s3-files": "^3.0.0"
   },
   "devDependencies": {
