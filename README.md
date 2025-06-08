@@ -196,6 +196,23 @@ If you would like a more fancy coverage report:
 npm run coverage
 ```
 
+## Publishing
+
+This package is automatically published to NPM when a new release is created on GitHub. The publishing workflow:
+
+1. Triggers on GitHub releases
+2. Runs tests to ensure quality
+3. Publishes to NPM using the `NPM_TOKEN` secret
+
+### Setup for Maintainers
+
+To enable automatic publishing, the repository requires an `NPM_TOKEN` secret to be configured in GitHub:
+
+1. Generate an NPM access token with publish permissions
+2. Add it as a repository secret named `NPM_TOKEN` in GitHub Settings > Secrets and variables > Actions
+
+The workflow can also be triggered manually from the Actions tab for testing purposes.
+
 
 
 
