@@ -213,6 +213,26 @@ To enable automatic publishing, the repository requires an `NPM_TOKEN` secret to
 
 The workflow can also be triggered manually from the Actions tab for testing purposes.
 
+### Troubleshooting NPM Publishing Issues
+
+If you encounter npm publish errors (such as 404 Not Found), check the following:
+
+1. **Token Permissions**: Ensure the `NPM_TOKEN` has publish permissions for the s3-zip package
+2. **Package Ownership**: Verify the token belongs to a user with maintainer access to the package
+3. **Token Validity**: Check if the token has expired or been revoked
+4. **Network Issues**: Temporary NPM registry issues can cause intermittent failures
+
+**Common Error Messages:**
+- `404 Not Found`: Usually indicates authentication/permission issues
+- `403 Forbidden`: The token lacks necessary permissions
+- `EOTP`: Two-factor authentication is required
+
+**Debug Steps:**
+1. Check the workflow logs for detailed error messages
+2. Verify token permissions at [npmjs.com](https://www.npmjs.com/settings/tokens)
+3. Test authentication manually: `npm whoami` with the token
+4. Consider regenerating the NPM_TOKEN if issues persist
+
 
 
 

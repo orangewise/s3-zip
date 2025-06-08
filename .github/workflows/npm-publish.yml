@@ -33,11 +33,30 @@ jobs:
         id: tag
         run: |
           VERSION=$(node -p "require('./package.json').version")
+          echo "Package version: $VERSION"
           if [[ $VERSION =~ -[a-zA-Z] ]]; then
             echo "tag=alpha" >> $GITHUB_OUTPUT
+            echo "Publishing as pre-release with alpha tag"
           else
             echo "tag=latest" >> $GITHUB_OUTPUT
+            echo "Publishing as stable release with latest tag"
           fi
+
+      - name: Verify NPM authentication
+        run: |
+          echo "Checking NPM authentication..."
+          npm whoami
+          echo "Checking package access permissions..."
+          npm access ls-packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Dry run publish
+        run: |
+          echo "Running npm publish dry-run to validate package..."
+          npm publish --tag ${{ steps.tag.outputs.tag }} --dry-run
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish to NPM
         run: npm publish --tag ${{ steps.tag.outputs.tag }}
