@@ -11,35 +11,19 @@ on:
         type: string
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      # Setup .npmrc file to publish to npm
+      - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
-
-      - name: Install dependencies
-        run: npm i
-
-      - name: Run tests
-        run: npm test
-
-      - name: Determine publish tag
-        id: tag
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          if [[ $VERSION =~ -[a-zA-Z] ]]; then
-            echo "tag=alpha" >> $GITHUB_OUTPUT
-          else
-            echo "tag=latest" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Publish to NPM
-        run: npm publish --tag ${{ steps.tag.outputs.tag }}
+      - run: npm i
+      - run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
