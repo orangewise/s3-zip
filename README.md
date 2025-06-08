@@ -53,16 +53,18 @@ You can also pass a custom S3 client. For example if you want to zip files from 
 ```javascript
 const { S3Client } = require('@aws-sdk/client-s3')
 
-const S3Client = new aws.S3({
-  signatureVersion: 'v4',
-  s3ForcePathStyle: 'true',
+const s3Client = new S3Client({
+  region: 'us-east-1',
   endpoint: 'http://localhost:9000',
+  forcePathStyle: true
 })
 
 s3Zip
-  .archive({ s3: S3Client, bucket: bucket }, folder, [file1, file2])
+  .archive({ s3: s3Client, bucket: bucket }, folder, [file1, file2])
   .pipe(output)
 ```
+
+**Note:** When passing a custom S3 client, it must be an AWS SDK v3 client (from `@aws-sdk/client-s3`). AWS SDK v2 clients are not supported and will result in an error.
 
 ### Zip files with AWS Lambda
 

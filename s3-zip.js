@@ -13,6 +13,11 @@ s3Zip.archive = function (opts, folder, filesS3, filesZip) {
   self.debug = opts.debug || false
 
   if ('s3' in opts) {
+    // Validate that the provided S3 client is compatible with AWS SDK v3
+    if (!opts.s3 || typeof opts.s3.send !== 'function') {
+      throw new Error('The provided S3 client must be an AWS SDK v3 client with a .send() method. ' +
+        'Please use @aws-sdk/client-s3 (v3) instead of aws-sdk (v2).')
+    }
     connectionConfig = {
       s3: opts.s3
     }
