@@ -29,7 +29,17 @@ jobs:
       - name: Run tests
         run: npm test
 
+      - name: Determine publish tag
+        id: tag
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if [[ $VERSION =~ -[a-zA-Z] ]]; then
+            echo "tag=alpha" >> $GITHUB_OUTPUT
+          else
+            echo "tag=latest" >> $GITHUB_OUTPUT
+          fi
+
       - name: Publish to NPM
-        run: npm publish
+        run: npm publish --tag ${{ steps.tag.outputs.tag }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
