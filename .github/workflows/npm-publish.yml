@@ -45,9 +45,36 @@ jobs:
       - name: Verify NPM authentication
         run: |
           echo "Checking NPM authentication..."
-          npm whoami
+          if npm whoami; then
+            echo "✅ NPM authentication successful"
+            echo "Current user: $(npm whoami)"
+          else
+            echo "❌ NPM authentication failed"
+            echo "Please check if NPM_TOKEN is valid and has proper permissions"
+            exit 1
+          fi
+          
           echo "Checking package access permissions..."
-          npm access ls-packages
+          if npm access ls-packages 2>/dev/null; then
+            echo "✅ Package access check completed"
+          else
+            echo "⚠️  Package access check failed (this may be normal for new tokens)"
+            echo "Continuing with publish attempt..."
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Check if version exists
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "Checking if version $VERSION already exists on NPM..."
+          if npm view s3-zip@$VERSION version 2>/dev/null; then
+            echo "⚠️  Version $VERSION already exists on NPM"
+            echo "Please update the version number in package.json"
+            exit 1
+          else
+            echo "✅ Version $VERSION is available for publishing"
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
