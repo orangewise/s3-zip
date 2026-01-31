@@ -38,7 +38,7 @@ exports.handler = function (event, context) {
         },
         (e) => {
           console.log('zipFile.upload error', e)
-          context.fail(err)
+          context.fail(e)
         }
       )
 

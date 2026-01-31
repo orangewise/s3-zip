@@ -1,8 +1,7 @@
 # s3-zip
 
 [![npm version][npm-badge]][npm-url]
-[![Build Status][travis-badge]][travis-url]
-[![Coverage Status][coveralls-badge]][coveralls-url]
+[![Build Status][gh-actions-badge]][gh-actions-url]
 [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 
 Download selected files from an Amazon S3 bucket as a zip file.
@@ -96,7 +95,7 @@ const files = s3.listObjects(params).createReadStream()
 const xml = new XmlStream(files)
 xml.collect('Key')
 xml.on('endElement: Key', function(item) {
-  filesArray.push(item['$text'].substr(folder.length))
+  filesArray.push(item['$text'].substring(folder.length))
 })
 
 xml
@@ -219,9 +218,7 @@ The workflow can also be triggered manually from the Actions tab for testing pur
 [aws-sdk-url]: https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/configuring-the-jssdk.html
 [npm-badge]: https://badge.fury.io/js/s3-zip.svg
 [npm-url]: https://badge.fury.io/js/s3-zip
-[travis-badge]: https://travis-ci.org/orangewise/s3-zip.svg?branch=master
-[travis-url]: https://travis-ci.org/orangewise/s3-zip
-[coveralls-badge]: https://coveralls.io/repos/github/orangewise/s3-zip/badge.svg?branch=master
-[coveralls-url]: https://coveralls.io/github/orangewise/s3-zip?branch=master
+[gh-actions-badge]: https://github.com/orangewise/s3-zip/actions/workflows/test.yml/badge.svg?branch=master
+[gh-actions-url]: https://github.com/orangewise/s3-zip/actions/workflows/test.yml
 [archiver-url]: https://www.npmjs.com/package/archiver
 [entrydata-url]: https://archiverjs.com/docs/global.html#EntryData
